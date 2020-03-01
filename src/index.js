@@ -42,7 +42,10 @@ class ModuleWrapper {
           reject(error);
         }
       });
-    }
+    };
+    this.setFontWidth = function(name, widths) {
+      Viz.setFontWidth(instance, name, widths);
+    };
   }
 }
 
@@ -148,6 +151,10 @@ class Viz {
       throw new Error(`Must specify workerURL or worker option, Module and render options, or include one of full.render.js or lite.render.js after viz.js.`);
     }
   }
+
+  setFontWidth(name, widths) {
+    this.wrapper.setFontWidth(name, widths);
+  }
   
   renderString(src, { format = 'svg', engine = 'dot', files = [], images = [], yInvert = false, nop = 0 } = {}) {
     for (let i = 0; i < images.length; i++) {
@@ -158,7 +165,7 @@ class Viz {
 <svg width="${images[i].width}" height="${images[i].height}"></svg>`
       });
     }
-    
+
     return this.wrapper.render(src, { format, engine, files, images, yInvert, nop });
   }
   

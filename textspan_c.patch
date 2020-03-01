@@ -1,0 +1,44 @@
+--- a/lib/common/textspan.c	(revision 88d30fcf41c0d4fbd565a5c06d42fffd4527ed33)
++++ b/lib/common/textspan.c	(date 1583018453505)
+@@ -120,6 +120,28 @@
+     0.5999, 0.5999, 0.5999, 0.5999, 0.5999, 0.5999, 0.5999, 0.5999,	/* øùúû     */
+ };
+ 
++typedef struct {
++    char name[50];
++    double (*widths)[256];
++} font_width_t;
++
++font_width_t *font_widths[512];
++
++int find_font(const char *name){
++    int i = 0;
++    while(i < 512 && font_widths[i] != NULL && strncasecmp(font_widths[i]->name, name, 50)) i++;
++    return i;
++}
++
++void set_font_width(const char *name, double (*widths)[256]){
++    int i = find_font(name);
++    if (font_widths[i] == NULL){
++        font_widths[i] = malloc(sizeof(font_width_t));
++        strncpy(font_widths[i]->name, name, 50);
++        font_widths[i]->widths = widths;
++    }
++}
++
+ /* estimate_textspan_size:
+  * Estimate size of textspan, for given face and size, in points.
+  */
+@@ -139,7 +161,11 @@
+     span->layout = NULL;
+     span->free_layout = NULL;
+ 
+-    if (!strncasecmp(fontname, "cour", 4)) {
++    int i = find_font(fontname);
++    if (font_widths[i] != NULL){
++    fpp = &font_widths[i]->name;
++    Fontwidth = font_widths[i]->widths;
++    }else if (!strncasecmp(fontname, "cour", 4)) {
+ 	fpp = "[internal courier]";
+ 	Fontwidth = courFontWidth;
+     } else if (!strncasecmp(fontname, "arial", 5)

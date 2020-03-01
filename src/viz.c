@@ -4,6 +4,8 @@
 extern int Y_invert;
 extern int Nop;
 
+extern void set_font_width(const char *name, double (*widths)[256]);
+
 extern gvplugin_library_t gvplugin_core_LTX_library;
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 #ifndef VIZ_LITE
@@ -38,6 +40,10 @@ void vizSetY_invert(int invert) {
 void vizSetNop(int value) {
   if (value != 0)
     Nop = value;
+}
+
+void vizSetFontWidth(const char *name, double (*widths)[256]) {
+    set_font_width(name,widths);
 }
 
 char* vizRenderFromString(const char *src, const char *format, const char *engine) {

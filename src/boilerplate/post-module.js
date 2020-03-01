@@ -21,8 +21,22 @@ function render(instance, src, options) {
   if (errorMessageString != '') {
     throw new Error(errorMessageString);
   }
-  
+
   return resultString;
+}
+
+function setFontWidth(instance, name, widths) {
+  var typedArray = Float64Array.from(widths);
+  var bytes = _arrayToHeap(typedArray);
+  instance['ccall']('vizSetFontWidth', 'number', ['string', 'number'], [name, bytes.byteOffset]);
+
+  function _arrayToHeap(typedArray){
+    var numBytes = typedArray.length * typedArray.BYTES_PER_ELEMENT;
+    var ptr = instance._malloc(numBytes);
+    var heapBytes = new Uint8Array(instance.HEAPU8.buffer, ptr, numBytes);
+    heapBytes.set(new Uint8Array(typedArray.buffer));
+    return heapBytes;
+  }
 }
 
 if (typeof importScripts === "function") {
@@ -56,6 +70,7 @@ if (typeof exports === 'object' && typeof module !== 'undefined') {
 
 if (typeof global.Viz !== 'undefined') {
   global.Viz.render = render;
+  global.Viz.setFontWidth = setFontWidth;
   global.Viz.Module = Module;
 }
 
