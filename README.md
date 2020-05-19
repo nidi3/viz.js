@@ -28,6 +28,16 @@ The build process for Viz.js is split into two parts: building the Graphviz and 
     make deps
     make all
 
+### With docker
+
+Create docker container to build:
+    
+    ./build_env.sh
+    
+Run the build with the continer:
+
+    ./build.sh
+    
 ## Running Browser Tests
 
 The browser tests can be run locally using Selenium WebDriver.
