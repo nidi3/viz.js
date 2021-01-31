@@ -1,5 +1,5 @@
 {
-  "name": "viz.js-for-graphviz-java",
+  "name": "viz.js-graphviz-java",
   "version": "2.1.3",
   "description": "A hack to put Graphviz on the web.",
   "main": "viz.js",
